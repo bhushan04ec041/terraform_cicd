@@ -14,7 +14,7 @@ phases:
       - terraform init
   build:
     commands:
-      - terraform plan -out=tfplan
+      - terraform plan
   post_build:
     commands:
-      - terraform apply -auto-approve tfplan
+      - terraform apply
