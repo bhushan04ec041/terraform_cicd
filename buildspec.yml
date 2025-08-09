@@ -17,4 +17,4 @@ phases:
       - terraform plan
   post_build:
     commands:
-      - terraform apply
+      - terraform apply -auto-approve
