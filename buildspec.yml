@@ -32,7 +32,7 @@ phases:
   post_build:
     commands:
       - if [ "$APPLY_CHANGES" = "true" ]; then
-          terraform apply -input=false -auto-approve tfplan;
+          terraform destroy -input=false -auto-approve tfplan;
         else
           echo "Skipping apply step as APPLY_CHANGES=$APPLY_CHANGES";
         fi
