@@ -14,17 +14,9 @@ phases:
       - terraform init
   build:
     commands:
+      - terraform fmt
+      - terraform validate  
       - terraform plan
   post_build:
     commands:
-      - terraform estroy -auto-approve
-  pre_build:
-    commands:
-      - cd envs/dev
-      - terraform init
-  build:
-    commands:
-      - terraform plan
-  post_build:
-    commands:
-      - terraform estroy -auto-approve
+      - terraform apply -auto-approve
