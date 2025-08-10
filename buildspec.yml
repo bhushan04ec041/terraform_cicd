@@ -3,21 +3,24 @@ version: 0.2
 env:
   variables:
     TF_VERSION: "1.6.0"
-    ENV: "dev"  # overridden by CodePipeline for prod
+  parameter-store:
+    ENV: "/terraform/env"               # fetch environment dynamically
+    APPLY_CHANGES: "/terraform/apply"   # fetch apply flag
 
 phases:
   install:
     commands:
-      - echo Installing Terraform $TF_VERSION...
-      - curl -LO https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
-      - unzip terraform_${TF_VERSION}_linux_amd64.zip
+      - echo "Installing Terraform ${TF_VERSION}..."
+      - curl -s -LO https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - unzip -q terraform_${TF_VERSION}_linux_amd64.zip
       - mv terraform /usr/local/bin/
       - terraform --version
 
   pre_build:
     commands:
+      - echo "Using environment: $ENV"
       - cd envs/$ENV
-      - terraform init
+      - terraform init -backend-config="key=${ENV}/terraform.tfstate"
       - terraform workspace select $ENV || terraform workspace new $ENV
 
   build:
@@ -28,4 +31,8 @@ phases:
 
   post_build:
     commands:
-      - if [ "$APPLY_CHANGES" = "true" ]; then terraform apply -input=false -auto-approve tfplan; fi
+      - if [ "$APPLY_CHANGES" = "true" ]; then
+          terraform apply -input=false -auto-approve tfplan;
+        else
+          echo "Skipping apply step as APPLY_CHANGES=$APPLY_CHANGES";
+        fi
