@@ -17,7 +17,7 @@ phases:
       - terraform plan
   post_build:
     commands:
-      - terraform destroy -auto-approve
+      - terraform estroy -auto-approve
   pre_build:
     commands:
       - cd envs/dev
@@ -27,4 +27,4 @@ phases:
       - terraform plan
   post_build:
     commands:
-      - terraform destroy -auto-approve
+      - terraform estroy -auto-approve
