@@ -8,4 +8,4 @@ tags = {
 }
 ssh_allowed_ip = "115.99.105.79"
 project_name   = "myapp"
-env            = "dev"
+env            = "prod"
