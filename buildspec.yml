@@ -10,7 +10,7 @@ phases:
       - terraform --version
   pre_build:
     commands:
-      - cd envs/dev
+      - cd envs/prod
       - terraform init
   build:
     commands:
